@@ -18,7 +18,7 @@ This package is a refactoring of Montgomery Slatkin's [code for an "Exact" test 
 
 The refactoring allows the code to be used as a library, in addition to the original use as a console/command line program.  The original "enumerate" code is unchanged, and preserved for testing against modifications that I make to the monte carlo version.  
 
-The monte carlo version has been migrated into `slatkin.h` and `slatkin.c`, with a single "API" function to call: `slatkin_mc()`, which takes the number of monte carlo replications, and an array of integers representing the allele/trait counts.  The function returns a simple struct with members `probability`, and the `theta_estimate`.
+The monte carlo version has been migrated into `slatkin_impl.h` and `slatkin_impl.c`, with a single "API" function to call: `slatkin_mc()`, which takes the number of monte carlo replications, and an array of integers representing the allele/trait counts.  The function returns a simple struct with members `probability`, and the `theta_estimate`.
 
 There is also a C language function called `montecarlo()` which wraps `slatkin_mc()`, taking a slightly different set of arguments.  This is meant specifically to be easy for SWIG to construct Python and other language modules from, but it might also be useful in C itself given that it takes `int**` instead of `int[]`.  
 

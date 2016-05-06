@@ -25,7 +25,7 @@ void montecarlo(int maxreps, int** counts, int numalleles, double* probability, 
 	r_obs[0] = 0;
 
 	for(i = 1; i <= numalleles; i++) {
-		r_obs[i] = counts[i-1];
+		r_obs[i] = *counts[i-1];
 	}
 
 	r_obs[numalleles + 1] = 0;
