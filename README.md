@@ -60,10 +60,16 @@ the bindings are not structured as a proper Julia package, but they can be used
 with the following steps:
 
   1. Issue `make shared` to produce `slatkin.so`
-  2. Copy `slatkin.so` and `slatkin.jl` into your project
+  2. Copy or link `slatkin.jl` into your project (or just use the full path to the file in the next step)
   3. Import the Julia bindings with `include("slatkin.jl")`
+  4. When you run your script, you must update `LD_LIBRARY_PATH` to include the directory that contains `slatkin.so`, so maybe
+  `LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/path/to/slatkin-exact-tools"`
 
 In the future a full Julia package might be produced.
+
+To run the Julia test file, navigate to the `test/` subdirectory and run
+`montecarlo_test.jl.sh`, which sets the `LD_LIBRARY_PATH` variable
+appropriately before running `montecarlo_test.jl`.
 
 #### Julia Caveats ####
 
@@ -76,7 +82,7 @@ result = ewens_montecarlo(Int32(100000), counts)
 ```
 
 Keep in mind that all the code here is released under the GPL, so there may be
-implications if you decide to distribute your Julia application, you may want
+implications if you decide to distribute your Julia application. You may want
 to include the full source in your project, or even just include this
 repository as a submodule if you are using Git.
 

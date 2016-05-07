@@ -1,5 +1,4 @@
-cd("../")
-include("$(pwd())/slatkin.jl")
+include("../slatkin.jl")
 
 function approx(value, target, message)
   @assert value < target + 0.01 message
