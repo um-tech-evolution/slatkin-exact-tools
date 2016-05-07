@@ -52,6 +52,29 @@ print "prob: %s    theta: %s" % (prob, theta)
 
 The python module is constructed most easily by running `make python` or `make all`, and is installed by running `make pyinstall`.  The latter will install the built module to the user's current Python distribution, as determined by the python interpreter in the user's path.  In some cases, you may need `sudo make pyinstall` to make this work, or to make the module available for all users on the system.  
 
+### Julia Bindings ###
+
+The file `slatkin.jl` contains code that allows the Slatkin Monte Carlo method
+to be called from code written in [Julia](https://julialang.org). Currently,
+the bindings are not structured as a proper Julia package, but they can be used
+with the following steps:
+
+  1. Issue `make shared` to produce `slatkin.so`
+  2. Copy `slatkin.so` and `slatkin.jl` into your project
+  3. Import the Julia bindings with `include("slatkin.jl")`
+
+In the future a full Julia package might be produced.
+
+#### Julia Caveats ####
+
+The C algorithm relies on 32 bit integers, so the Julia code, for now, requires
+32 bit values. This can be managed as follows:
+
+```julia
+counts = Int32[8, 4, 3, 2, 2, 1, 1, 1, 1, 1, 1]
+result = ewens_montecarlo(Int32(100000), counts)
+```
+
 
 ### Compatibility with Version 1.2 and Previous Revisions ###
 

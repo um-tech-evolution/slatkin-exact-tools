@@ -21,9 +21,3 @@ function ewens_montecarlo(num_reps::Int32, obs_list::Vector{Int32})
   montecarlo(num_reps, obs_list, padded_numalleles, parallel)
 end
 
-counts1 = Int32[8, 4, 3, 2, 2, 1, 1, 1, 1, 1, 1]
-ewens_montecarlo(Int32(100000), counts1) |> println
-
-counts2 = Int32[91, 56, 27, 9, 7, 3, 1]
-ewens_montecarlo(Int32(100000), counts2) |> println
-
