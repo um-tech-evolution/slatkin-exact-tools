@@ -75,6 +75,11 @@ counts = Int32[8, 4, 3, 2, 2, 1, 1, 1, 1, 1, 1]
 result = ewens_montecarlo(Int32(100000), counts)
 ```
 
+Keep in mind that all the code here is released under the GPL, so there may be
+implications if you decide to distribute your Julia application, you may want
+to include the full source in your project, or even just include this
+repository as a submodule if you are using Git.
+
 
 ### Compatibility with Version 1.2 and Previous Revisions ###
 
