@@ -16,8 +16,14 @@ python:
 install:
 	python setup.py install
 
-shared: $(SOURCES)
+shared-mc: $(SOURCES)
 	$(CC) -shared -fPIC -o slatkin.so slatkin_impl.c mersenne.c -lm
+
+#shared-enumerate: $(SOURCES)
+#	$(CC) -shared -fPIC -o slatkin_enum.so enumerate.c mersenne.c -lm
+
+shared-enum: $(SOURCES)
+	$(CC) -shared -fPIC -o slatkin_enum.so slatkin_enum.c mersenne.c -lm
 
 slatkin-enumerate: enumerate.o
 	$(CC) -o slatkin-enumerate enumerate.o -lm

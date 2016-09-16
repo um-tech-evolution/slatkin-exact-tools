@@ -6,6 +6,11 @@ typedef struct {
 	double theta_estimate;
 } slatkin_result;
 
+typedff struct {
+  double prob_slatkin_exact;
+  double prob_watterson;
+} slatkin_enum_result;
+
 #define KLIMIT	10000	/*  maximum number of alleles  */
 
 #define NR_END 1

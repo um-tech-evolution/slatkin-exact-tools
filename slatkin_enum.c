@@ -26,69 +26,72 @@ long   double factors[RLIM];	/*  contains factorials  */
 int Fsig, Esig;
 
 slatkin_enum_result slatkin_enum( int r_obs[] ){
+  int i;
+  void config(int rt, int rmax, int ic);
+  double ewens_form(int *r, int r_tot, double *mpt);
+  double F(int *r); 
+  double multiplicity;
+  double theta_est(int k_obs, int n);
+  void print_config(int *r);
+  void fill_factors();
   slatkin_enum_result result;
-  result.prob_slatkin_exact = 1.0;
-  result.prob_slatkin_exact = 1.0;
-  result.prob_watterson = 2.0;
+  r_tot = 0;
+  k = 1;
+  while( r_obs[k] > 0 ){
+		r_tot += r_obs[k];
+    /* printf("k: %d  r_obs[k]: %d\n",k,r_obs[k]); */
+    k++;
+  }
+  k = k-1;
+	F_obs = F(r_obs);
+  /* printf("\nn = %d, k = %d, theta = %g, F = %g\n", r_tot, k, theta_est(k, r_tot), F_obs); */
+  if (r_tot >= RLIM)  {
+    printf("n = %d is too large..\n", r_tot);
+    exit(0);
+  }
+  if (k >= KLIMIT)  {
+    printf("k = %d is too large.\n", k);
+    exit(0);
+  }
+  for (i=1; i<k; i++)
+    if (r_obs[i] < r_obs[i+1])  {
+      print_config(r_obs);
+      printf(" A valid configuration must be in decreasing order of allele counts.\n");
+      exit(0);
+  }
+	r_top = r_tot - 1;
+	Fsig = Esig = 0;
+	fill_factors();
+  obs_value = ewens_form(r_obs, r_obs[1], &multiplicity);
+  config(r_tot, r_tot-k+1, 1);
+  /* print_config(r_obs); */
+  result.prob_slatkin_exact = sig_sum / tot_sum;
+  result.prob_watterson = F_sig_sum / tot_sum;
+  result.theta_estimate = theta_est(k, r_tot);
   return result;
 }
-
 
 int main(int argc, char *argv[]) {
 	int i;
 	void config(int rt, int rmax, int ic);
 	double ewens_form(int *r, int r_tot, double *mpt);
-	double F(int *r), multiplicity;
+	/* double F(int *r), multiplicity; */
 	double theta_est(int k_obs, int n);
 	void print_config(int *r);
-	long start_time, finish_time, net_time;
+	/* long start_time, finish_time, net_time; */
 	void fill_factors();
-    
-	start_time = time(NULL);
-	if (argc == 1)  {
-        printf("Specify the configuration on the command line\n");
-		exit(0);
-  }
 	k = argc - 1;
 	for (i=1; i<=k; i++)  {
 		r_obs[i] = atoi(argv[i]);
 		r_tot += r_obs[i];
-  }
-	F_obs = F(r_obs);
-	printf("\nn = %d, k = %d, theta = %g, F = %g\n",
-           r_tot, k, theta_est(k, r_tot), F_obs);
-	if (r_tot >= RLIM)  {
-		printf("n = %d is too large..\n", r_tot);
-		exit(0);
-  }
-	if (k >= KLIMIT)  {
-		printf("k = %d is too large.\n", k);
-		exit(0);
-  }
-	for (i=1;
-         i<k; i++)
-		if (r_obs[i] < r_obs[i+1])  {
-			print_config(r_obs);
-			printf(" a valid configuration must be in decreasing order of counts.\n");
-			exit(0);
-  }
-	r_top = r_tot - 1;
-	Fsig = Esig = 0;
-	fill_factors();
-	obs_value = ewens_form(r_obs, r_obs[1], &multiplicity);
-	config(r_tot, r_tot-k+1, 1);
-	print_config(r_obs);
-	printf(":  P_E = %g, ", sig_sum / tot_sum);
-	printf("P_H = %g\n", F_sig_sum / tot_sum);
-	finish_time = time(NULL);
-	net_time = time(NULL) - start_time;
-	if (net_time < 60)
-		printf("Program took %ld seconds\n", net_time);
-	else
-		printf("Program took %4.2f minutes\n", net_time / 60.0);
-	return 0;
-}  /*  end, main  */
-
+    }
+  slatkin_enum_result result = slatkin_enum( r_obs );
+  printf("sl_exact : %6.3f\n",result.prob_slatkin_exact);
+  printf("watterson: %6.3f\n",result.prob_watterson);
+  printf("theta est: %6.3f\n",result.theta_estimate);
+  return 0;
+}
+ 
 void config(int rt, int rmax, int ic)  {
     int r1, i;
     double ewens_form(int *r, int r_top, double *mpt), test_value;
@@ -131,7 +134,7 @@ void print_config(int *r) {
 	printf("(");
 	for (i=1; i<k; i++)
 		printf("%d,", r[i]);
-	printf("%d)", r[k]);
+	printf("%d)\n", r[k]);
 }  /*  end, print_config  */
 
 double ewens_form(int *r, int r_top, double *mpt)  {
